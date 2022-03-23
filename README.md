@@ -1,1 +1,1 @@
-# points
+# Points sharing among friends
