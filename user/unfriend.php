@@ -18,6 +18,6 @@ if($value==3)
 	$status=3;
 	$result = mysqli_query($mysqli, "UPDATE friends SET status=$value WHERE sender = $id && receiver = $receiver");
 
-	header("Location:friendsdetails.php");
+	header("Location:profile.php");
 }
 ?>
