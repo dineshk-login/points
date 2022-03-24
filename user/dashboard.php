@@ -1,5 +1,8 @@
 <style type="text/css">
-  .user {
+  h1 {
+  font-family: "Lucida Console", "Courier New", monospace;
+}
+ .user {
   display: inline-block;
   width: 150px;
   height: 150px;
@@ -8,6 +11,21 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+   position: absolute;
+        top: 50px;
+        right: 40px;
+}
+table 
+{
+font-family: arial, sans-serif;
+border-collapse: collapse;
+width: 100%;
+}
+td, th 
+{
+border: 1px solid #dddddd;
+text-align: left;
+padding: 8px;
 }
 </style>
 <?php
@@ -19,54 +37,55 @@ if ( $fname == "")
   header("Location:login.php");	
 }else
 {
-  $result = mysqli_query($mysqli, "SELECT * FROM validate  WHERE name='$fname'"); 
-  echo "welcome".$fname;
+  $result = mysqli_query($mysqli, "SELECT * FROM validate  WHERE id='".$_SESSION["id"]."'"); 
 while($res = mysqli_fetch_assoc($result))
 {
   $a = $res['description'];
   "<br>";
   $color_code = $res['color'];
-  echo "$a";
+  //echo "$a";
   $points = $res['creditpoints'];
   $pic=$res['profilepicture'];
   $pic1="../common/profile/".$pic;
-  echo $pic1;
+  //echo $pic1;
   //die();
 }
 }
 $a= $_SESSION['id'];
 $result = mysqli_query($mysqli, "SELECT * FROM validate  where id='$a'"); 
 $res = mysqli_fetch_assoc($result);
-  $img=$res['profilepicture'];
+  //$img=$res['profilepicture'];
+  $points=$res['creditpoints'];
 switch (true) 
 {
 case ($points >=1 && $points<=400):
   $img = "../common/image/silver.jpg";
-  $des = "You are a silver trophy holder";
+  $des = "You won a Silver trophy with ".$points."points";
 break;
 case ($points >=201 && $points<=400):
   $img = "../common/image/gold.jpg";
-  $des = "You are a gold trophy holder";
-break;
+ $des = "You won a Gold trophy with ".$points."points";
+ break;
 case ($points >=401 && $points<=600):
   $img = "../common/image/plattinum.jpg";
-  $des = "You are a platinum trophy holder";
-break;
+ $des = "You won a Platinum trophy with ".$points."points";
+ break;
 case ($points >=601):
   $img = "../common/image/diamond.jpg";
-  $des = "You are a diamond trophy holder";
-break;
+ $des = "You won a Diamond trophy with ".$points."points";
+ break;
 }
 ?>
  <!-- <body  bgcolor="<?=$color_code;?>"> -->
   <body>
   <div><?php  include("../common/header1.php");?></div>
+  <center><div><h1><?= "Welcome ".$fname?></h1></div></center>
   <div><center><img class="user" src="<?php echo $pic1; ?>"></center></div>
   <form action="../admin/update.php" method="post">
   choose the name:	<select name="name">
   <option>--select--</option>
 <?php 
-  $result = mysqli_query($mysqli, "SELECT validate.id,validate.name,friends.id,friends.sender,friends.receiver from validate left join friends on validate.id=friends.sender where friends.receiver='".$_SESSION["id"]."' AND friends.status = 1"); 
+  $result = mysqli_query($mysqli, "SELECT validate.id,validate.name,friends.id,friends.sender,friends.receiver from validate left join friends on validate.id=friends.receiver where friends.sender='".$_SESSION["id"]."' AND friends.status = 1"); 
 while($res = mysqli_fetch_assoc($result)) 
 { 	
   echo "<option value=".$res['name'].">".$res['name']."</option>";
@@ -93,7 +112,8 @@ for ($i=50; $i <= $pnt; $i+=50)
 }
 ?>
   </select><button style="background-color: lightskyblue;" value="update" name="addpoints">update</button>
-  <center><div><?php if($pnt>0){?> <img src="<?php echo $img; ?>"> <?php echo $des; ?><?php } ?></div></center>
+  <center><div><?php if($pnt>0){?> <img src="<?php echo $img; ?>"> </div></center>
+  <center><div><b><?php echo $des; ?><?php } ?></b></div></center>
   </form>	
   <form action="friendrequest.php" method="post">
   choose name for send friendrequest:	<select name="receiver">
@@ -109,9 +129,6 @@ while($res = mysqli_fetch_assoc($result))
   </select>
   <input type="submit" value="send friend request" name="">
   </form> 
-  <form action="friendsdetails.php" >
-  <input type="submit" name="" value="see your friends">
-  </form>
 <?php  
   $ressult = mysqli_query($mysqli, "SELECT validate.id,validate.name,friends.id,friends.sender,friends.receiver from validate left join friends on validate.id=friends.sender where friends.receiver='".$_SESSION["id"]."'AND friends.status = 0");
 while($ress = mysqli_fetch_assoc($ressult)) 
@@ -122,6 +139,37 @@ while($ress = mysqli_fetch_assoc($ressult))
 <?php
 }
 ?>
-  <div><?php  include("../common/footer.php");?></div>
-  </body>
-  </html>
+<?php
+
+$search="";
+$match = "";
+if(isset($_POST["search"])){
+  $search=$_POST["search"];
+}
+$a= $_SESSION['id'];
+//echo $a;
+?>
+<table >
+<?php
+$sql = mysqli_query($mysqli, "SELECT *,id as uid FROM validate  WHERE  name='".$search."'");
+  $i=0;
+while($res = mysqli_fetch_assoc($sql)){
+   $i=$i+1;
+  if($i % 2 == 0){
+    $color = " #D3D3D3";
+  }else{
+    $color = " #87CEEB";
+  }
+?>
+<tr bgcolor="<?= $color;?>"><td><?= $i;?></td><td><?= $res['name'];?></td>
+<td><a href='profile.php?user_id=<?= $res['uid']?>'>view profile</a></td></tr>
+<?php  }?>
+</table>
+<center>
+<form action="" method="post">
+Search friend:<input type="text" name="search" value="<?=$search;?>"><?if($_post){ echo $match;}?>
+<input type="submit" value="submit" name="">
+</form></center>
+<div><?php  include("../common/footer.php");?></div>
+</body>
+</html>

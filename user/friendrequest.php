@@ -8,6 +8,8 @@ if($_REQUEST)
    $result = mysqli_query($mysqli, "SELECT * FROM validate WHERE id= '$a'"); 
    $res = mysqli_fetch_assoc($result);
    //$c=$res['id'];
+  // echo $b;
+   //die();
 if($b==$a)
 {
    echo "you are not allowed to send friendrequst to yourself";
@@ -30,9 +32,12 @@ if($b==$a)
       }
    }*/
    if(empty($rees)){
-      $result = mysqli_query($mysqli, "INSERT INTO `friends`(`sender`,`receiver`) VALUES('$a','$b')");   
+      $result = mysqli_query($mysqli, "INSERT INTO `friends`(`sender`,`receiver`) VALUES('$a','$b')");  
+      //echo "INSERT INTO `friends`(`sender`,`receiver`) VALUES('$a','$b')"; 
+     header("Location:../user/dashboard.php");
    }else if($rees['status'] == 3 || $rees['status'] == 2){
       $result = mysqli_query($mysqli, " UPDATE friends SET status=0 WHERE id='".$rees['id']."'");
+    header("Location:../user/dashboard.php");
    }else{
       echo "you already send friend request";
       die();

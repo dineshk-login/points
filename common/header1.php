@@ -24,13 +24,11 @@ if( !empty($row) && $row['designation'] == 'admin')
 }
 else if( !empty($row) && $row['designation'] == 'user' )
 {
-?>
+?><center>
   <div style="background-color: tan; font-size: 18px;">
-  <a <?php if($current == 'friendsdetails') { echo $cls;} ?> href="friendsdetails.php">friendsdetails</a>
-  |
   <a <?php if($current == 'dashboard') {echo $cls;} ?> href="dashboard.php"> dashboard</a>
   |
-  <a href="../user/logout.php">Logout</a></div>
+  <a href="../user/logout.php">Logout</a></div></center>
 <?php
 }
 ?>
