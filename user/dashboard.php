@@ -15,18 +15,6 @@
         top: 50px;
         right: 40px;
 }
-table 
-{
-font-family: arial, sans-serif;
-border-collapse: collapse;
-width: 100%;
-}
-td, th 
-{
-border: 1px solid #dddddd;
-text-align: left;
-padding: 8px;
-}
 </style>
 <?php
 session_start();
@@ -93,7 +81,6 @@ while($res = mysqli_fetch_assoc($result))
 ?>
 </select>
 <?php 
-include_once("../db/connection.php");
   $result = mysqli_query($mysqli, "SELECT * FROM validate WHERE name='".$fname."'");
   $res = mysqli_fetch_assoc($result);
   $pnt = $res['creditpoints'] ; 
@@ -148,10 +135,11 @@ if(isset($_POST["search"])){
 }
 $a= $_SESSION['id'];
 //echo $a;
+$b=$_SESSION["name"];
 ?>
 <table >
 <?php
-$sql = mysqli_query($mysqli, "SELECT *,id as uid FROM validate  WHERE  name='".$search."'");
+$sql = mysqli_query($mysqli, "SELECT *  FROM validate  WHERE  name='".$search."' AND name!= '".$b."'");
   $i=0;
 while($res = mysqli_fetch_assoc($sql)){
    $i=$i+1;
