@@ -2,6 +2,18 @@
   h1 {
   font-family: "Lucida Console", "Courier New", monospace;
 }
+table 
+{
+font-family: arial, sans-serif;
+border-collapse: collapse;
+width: 100%;
+}
+td, th 
+{
+border: 1px solid #dddddd;
+text-align: left;
+padding: 8px;
+}
  .user {
   display: inline-block;
   width: 150px;
@@ -137,9 +149,9 @@ $a= $_SESSION['id'];
 //echo $a;
 $b=$_SESSION["name"];
 ?>
-<table >
+<table>
 <?php
-$sql = mysqli_query($mysqli, "SELECT *  FROM validate  WHERE  name='".$search."' AND name!= '".$b."'");
+$sql = mysqli_query($mysqli, "SELECT *,id as uid FROM validate  WHERE  name='".$search."' AND name!= '".$b."'");
   $i=0;
 while($res = mysqli_fetch_assoc($sql)){
    $i=$i+1;
