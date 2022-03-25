@@ -57,7 +57,7 @@ if($res['designation'] == 'admin')
 	$delete = "<a href='delete.php?name=".$x."'>Delete</a>";
 }?>
 <tr bgcolor="<?= $color;?>" ><td><?= $res['name'];?></td><td><?= $res['creditpoints'];?></td><td><?= $res['color'];?></td><td><?= $res['address'];?></td>
-<td><?= $delete;?></td><td><a href='edit.php
+<td><?= $delete;?></td><td><a href='edit.php?name=<?= $res['name'];?>
 	'>Edit/<a href='view.php?name=<?= $res['name'];?>'>view</a></a></a></td></tr>
 <?php  }  ?>
 </table>
