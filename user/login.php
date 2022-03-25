@@ -9,7 +9,8 @@ if($_POST)
   $sql="SELECT * FROM validate WHERE name='$name' AND password='$password'";
   $result=mysqli_query($mysqli,$sql);
   $row=mysqli_fetch_assoc($result);
-  $id= $row['id'];
+  if(!empty($row)){
+  $id= $row['id'];}
   if (mysqli_num_rows($result))
   {
     if($row['designation'] == 'admin')
@@ -118,12 +119,9 @@ span.psw
 </head>
 <body bgcolor="grey">
 <form action="" method="POST">
-<div class="imgcontainer">
-<img src="avatar.jpg" alt="Avatar" class="avatar">
-</div>
 <div class="container">
 <label style="margin: 0px 0px 0px 10px;" for="uname"><b>Name</b></label>
-<input type="text" placeholder="Enter Name" name="name" >
+<input type="text" placeholder="Enter Name" name="name" required>
 <br>
 <label style="margin: 0px 0px 0px 10px;" for="psw"><b>Password</b></label>
 <input type="password" placeholder="Enter Password" name="password" required><span><?php
@@ -133,7 +131,7 @@ if($_POST)
 }
 ?></span>
 <br>
-<button type="submit">Login</button>
+<button style="margin: 0px 100px 100px 200px;" type="submit">Submit</button>
 </form>
 </body>
 </html>

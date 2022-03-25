@@ -43,19 +43,15 @@ while($res = mysqli_fetch_assoc($result))
   $a = $res['description'];
   "<br>";
   $color_code = $res['color'];
-  //echo "$a";
   $points = $res['creditpoints'];
   $pic=$res['profilepicture'];
   $pic1="../common/profile/".$pic;
-  //echo $pic1;
-  //die();
 }
 }
 $a= $_SESSION['id'];
 $result = mysqli_query($mysqli, "SELECT * FROM validate  where id='$a'"); 
 $res = mysqli_fetch_assoc($result);
-  //$img=$res['profilepicture'];
-  $points=$res['creditpoints'];
+$points=$res['creditpoints'];
 switch (true) 
 {
 case ($points >=1 && $points<=400):
@@ -85,10 +81,10 @@ case ($points >=601):
   choose the name:	<select name="name">
   <option>--select--</option>
 <?php 
-  $result = mysqli_query($mysqli, "SELECT validate.id,validate.name,friends.id,friends.sender,friends.receiver from validate left join friends on validate.id=friends.receiver where friends.sender='".$_SESSION["id"]."' AND friends.status = 1"); 
+  $result = mysqli_query($mysqli, "SELECT validate.id,validate.name,friends.sender,friends.receiver from validate left join friends on validate.id=friends.receiver where friends.sender='".$_SESSION["id"]."' AND friends.status = 1"); 
 while($res = mysqli_fetch_assoc($result)) 
 { 	
-  echo "<option value=".$res['name'].">".$res['name']."</option>";
+  echo "<option value=".$res['id'].">".$res['name']."</option>";
 }
 ?>
 </select>
@@ -100,7 +96,6 @@ while($res = mysqli_fetch_assoc($result))
 if($pnt == 0){
   echo "you have no points";
 }else
-
 {?>
   Select the points:<select name="point">
 <?php
@@ -110,7 +105,7 @@ for ($i=50; $i <= $pnt; $i+=50)
 }
 }
 ?>
-  </select><button style="background-color: lightskyblue;" value="update" name="addpoints">update</button>
+  </select><button style="background-color: lightskyblue;" value="update" name="addpoints">Send</button>
   <center><div><?php if($pnt>0){?> <img src="<?php echo $img; ?>"> </div></center>
   <center><div><b><?php echo $des; ?><?php } ?></b></div></center>
   </form>	
@@ -139,16 +134,18 @@ while($ress = mysqli_fetch_assoc($ressult))
 }
 ?>
 <?php
-
 $search="";
-$match = "";
 if(isset($_POST["search"])){
   $search=$_POST["search"];
 }
 $a= $_SESSION['id'];
 //echo $a;
 $b=$_SESSION["name"];
-?>
+?><center>
+<form action="" method="post">
+Search friend:<input type="text" name="search" value="<?=$search;?>">
+<input type="submit" value="submit" name="">
+</form></center>
 <table>
 <?php
 $sql = mysqli_query($mysqli, "SELECT *,id as uid FROM validate  WHERE  name='".$search."' AND name!= '".$b."'");
@@ -165,11 +162,6 @@ while($res = mysqli_fetch_assoc($sql)){
 <td><a href='profile.php?user_id=<?= $res['uid']?>'>view profile</a></td></tr>
 <?php  }?>
 </table>
-<center>
-<form action="" method="post">
-Search friend:<input type="text" name="search" value="<?=$search;?>"><?if($_post){ echo $match;}?>
-<input type="submit" value="submit" name="">
-</form></center>
 <div><?php  include("../common/footer.php");?></div>
 </body>
 </html>

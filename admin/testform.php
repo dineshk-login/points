@@ -66,7 +66,8 @@ echo $_POST['b'];} ?>"></td><br>
 <tr><td> <?php echo  $result2;?></td> </center></tr>
 <tr><td> <?php echo  $result3;?></td> </center></tr>
 <tr><td> <?php echo  $result4;?></td> </center></tr>
-</form></table></center>
+</
+form></table></center>
 
 </body>
 </html>

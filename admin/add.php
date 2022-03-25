@@ -32,32 +32,17 @@ include_once("../db/connection.php");
 	$cls7="";
 	$warning="";
 
-if(isset($_POST['btnsubmit'])){
- 
+if(isset($_POST['submit'])){
   $imagename = $_FILES['file']['name'];
   $target_dir = "../common/profile/";
   $target_file = $target_dir . basename($_FILES["file"]["name"]);
-
-  // Select file type
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
-  // Valid file extensions
-  $extensions_arr = array("jpg","jpeg","png","gif");
-
-  // Check extension
+	$extensions_arr = array("jpg","jpeg","png","gif");
   if( in_array($imageFileType,$extensions_arr) ){
-     // Upload file
      if(move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$imagename)){
-        // Insert record
        echo $imagename;
-      //echo "INSERT INTO `validate`(`profilepicture`) VALUES('$imagename')";
-      // die();
-        //$result = mysqli_query($mysqli, "INSERT INTO `validate`(`profilepicture`) VALUES('$imagename')");
-        //mysqli_query($con,$query);
      }
-
   }
- 
 }
 if($_SESSION["superadmin"] =="")
 {
@@ -181,8 +166,6 @@ else
 	</tr> 
 	</table>
 </form>
-
-
 <div><?php include("../common/footer.php");?></div> 
 </body>
 </html>

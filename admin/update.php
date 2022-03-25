@@ -7,7 +7,6 @@ if($_SESSION["name"]=="")
 }
 ?>
 <?php 
-
 if($_POST)
 {
 $point = $_POST['point']; 
@@ -19,9 +18,15 @@ if($point > $_SESSION["pntss"])
 $fname = $_SESSION["name"];
 $name = $_POST['name'];
 $point = $_POST['point'];
-include_once("../db/connection.php");
-$result = mysqli_query($mysqli, "UPDATE validate SET creditpoints = $point + creditpoints WHERE name='$name'");
-$point = mysqli_query($mysqli, "UPDATE validate SET creditpoints =  creditpoints - $point WHERE name='$fname'");
+$t=time();
+$date=date("d-m-y");
+$rslt= mysqli_query($mysqli, "SELECT * FROM validate  WHERE id='$name'");
+$res= mysqli_fetch_assoc($rslt);
+$receivername=$res['name'];
+echo $point;
+$result = mysqli_query($mysqli, "INSERT INTO `transactiondetails`(`senderid`,`sendername`,`receiverid`,`receivername`,`transactionpoints`,`date`,`time`) VALUES('".$_SESSION["id"]."','$fname','$name','$receivername','$point','$date','$t')");
+$result = mysqli_query($mysqli, "UPDATE validate SET creditpoints = $point + creditpoints WHERE id='$name'");
+$point = mysqli_query($mysqli, "UPDATE validate SET creditpoints =  creditpoints - $point WHERE id='".$_SESSION["id"]."'");
 header("Location:../user/dashboard.php");	
 }
 ?>

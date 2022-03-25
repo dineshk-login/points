@@ -37,8 +37,6 @@ if ($_SESSION["name"] =="") {
     border-radius:  50%;
 
 }
-
-
 body
 {
 font-family: Arial, Helvetica, sans-serif;
@@ -59,24 +57,38 @@ padding: 8px;
 display: flex;
 justify-content: center;
 float: right;
-
 }
 }
 </style>
 <body bgcolor="grey">
 <?php
 include_once("../common/header1.php");
-$rslt= mysqli_query($mysqli, "SELECT *  from  validate where id='".$_SESSION["id"]."'"); 
-$rslt1= mysqli_fetch_assoc($rslt);
-$pic="../common/profile/".$rslt1['profilepicture'];
 $sender=$_GET['user_id'];
 $result1 = mysqli_query($mysqli, "SELECT *  from  friends where friends.sender='".$_SESSION["id"]."' AND friends.status = 1 AND friends.receiver='$sender'"); 
-$res1=mysqli_fetch_assoc($result1);
 $link="";
 if( empty($res1) ){
   $link="<a href='friendrequest.php?sender=". $_SESSION['id']."&receiver=". $sender."'>sendfriendrequest</a>";
 }else{
   $link="<a href='unfriend.php?receiver=". $res1['receiver']."&value=3'>unfriend</a>";
+}
+$result = mysqli_query($mysqli, "SELECT * FROM validate where id='$sender' "); 
+$res1=mysqli_fetch_assoc($result);
+$pic="../common/profile/".$res1['profilepicture'];
+$points= $res1['creditpoints'];
+switch (true) 
+{
+case ($points >=1 && $points<=400):
+  $img = "../common/image/silver.jpg";
+break;
+case ($points >=201 && $points<=400):
+  $img = "../common/image/gold.jpg";
+ break;
+case ($points >=401 && $points<=600):
+  $img = "../common/image/plattinum.jpg";
+ break;
+case ($points >=601):
+  $img = "../common/image/diamond.jpg";
+ break;
 }
 $result = mysqli_query($mysqli, "SELECT * FROM validate where id='$sender' "); 
 while($res = mysqli_fetch_assoc($result)){
@@ -87,7 +99,7 @@ while($res = mysqli_fetch_assoc($result)){
     <div class="container-fluid" style="background-color:grey">
     <div class="row" style="justify-content: space-around;">
     <div class="col-md-4"><b>Description:</b><br><?= $res['description'];?><br></div>
-    <div class="col-md-4"><img width="100%" height="300px"  src="<?="../common/profile/". $res['profilepicture'];?>"></div>
+    <div class="col-md-4"><?php if($points > 0) {?><img width="100%" height="300px"  src="<?php echo $img; ?>"><?php }?></div>
     <div class="col-md-4 "><b>Name:</b><?= $res['name'];?><br><br><b>Address:</b><?= $res['address'];?><br><br>
     <b>Color:</b><?= $res['color'];?><br><br><b>Designation:</b><?= $res['designation'];?><br><br><b>Facebook:</b><?= $res['facebook'];?><br><br><b>Twitter:</b><?= $res['twitter'];?><br></div>
     </div>

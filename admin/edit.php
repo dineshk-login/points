@@ -1,3 +1,4 @@
+
 <?php
 include_once("../db/connection.php");
 if(isset($_POST['name'])) 
@@ -13,7 +14,6 @@ if(isset($_POST['name']))
 <?php
 	$name = $_GET['name'];
 	include_once("../db/connection.php");
-    //echo "=====".$name."".'lath'."";
 	$result = mysqli_query($mysqli, "SELECT * FROM validate WHERE name='".$name."' ");
 while($res = mysqli_fetch_assoc($result))
 {
