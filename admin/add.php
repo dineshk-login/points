@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	 	//alert("hai");
 	 	//console.log("inside");
@@ -16,7 +20,21 @@
             	document.form1.submit();
             	 
             }
+
         }
+
+$(document).ready(function(){
+	$("#email").keyup(function(){  
+		$.post("emailvalidation.php",
+			{
+			email:$("#email").val(),
+			},
+		function(data,status){
+			$("#alert").text( data);
+		});
+	});
+});
+
     </script>
            
 <?php 
@@ -91,18 +109,9 @@ if(isset($_POST['email'])&&(($_POST['email']) == ""))
 }   
 if($_POST)
 {
-	
-$check_email="SELECT email FROM validate WHERE email= '".$_POST['email']."'";
-	//echo $check_email;
-	$result=mysqli_query($mysqli,$check_email);
-	$count=mysqli_num_rows($result);
-	//echo "count is >>" . $count;
-	if ($count > 0) {
-		$alert= "This email already exist";
-	}
 if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST['address']=="" || $_POST['description']==""  || $_POST['creditpoints']==""|| $_POST['twitter']==""||$_POST['facebook']==""||$_POST['email']=="")
 {
-	$warning = "* all fields are mandatory";}
+	$warning = "* all fields are mandatory";
 }
 	else
 {
@@ -118,7 +127,7 @@ if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST[
   $email = $_POST['email'];
 	$result = mysqli_query($mysqli, "INSERT INTO `validate`(`name`,`password`,`color`,`address`,`description`,`creditpoints`,`profilepicture`,`twitter`,`facebook`,`email`) VALUES('$name','$password','$color','$address','$description','$creditpoints','$imagename','$twitter','$facebook','$email')");
 	header("Location:dashboard.php");
-}
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -163,7 +172,7 @@ if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST[
 	<tr> 
 	<td>Enter creditpoint</td>
 	<td><input <?php echo $cls5; ?> type="text" name="creditpoints"  value="<?php if(isset($_POST['creditpoints'])) {
-		echo $_POST['creditpoints'];} ?>"></td>
+		echo $_POST['creditpoints'];} ?>"></td>   
 	</tr>
 	<tr> 
 	<td>Enter address</td>
@@ -179,7 +188,7 @@ if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST[
 	</tr>
 	<tr> 
 	<td>email</td>
-	<td><input <?php echo $cls8; ?> type="text" name="email"  value="<?php if(isset($_POST['email'])) { echo $_POST['email'];} ?>"><span><?=$alert;?></span></td>
+	<td><input <?php echo $cls8; ?> type="text" name="email" id="email" value="<?php if(isset($_POST['email'])) { echo $_POST['email'];} ?>" onkeyup="emailvalidate()"><span  style="color:red;" id="alert"></span></td>
 	</tr>
 	<tr>
 		<td> Choose photo:</td><td> <input type='file' name='file' id="file1" ></td>
