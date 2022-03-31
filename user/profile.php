@@ -13,7 +13,53 @@ if ($_SESSION["name"] =="") {
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+/*$(document).ready(function(){
+  $("#friend").click(function(){
+    alert("hai");
+  
+   // $.get("unfriend.php?sender="<?php echo  $_SESSION['id'];?>"&receiver="<?php echo $sender;?>"",
+    
+     function(data,status){
+      
+      alert("Data: " + data + "\nStatus: " + status);
+      //$("#result").text("result is " + data);
+      
+    };
+    });
+    });
+*/
+
+        $(document).ready(function () {
+      
+     $('#unfriend').click(function(){
+      
+      $.get('unfriend.php',   // url
+         { sender:'<?php echo $_SESSION['id']?>',receiver:'<?php echo $_GET['user_id'] ?>',value:'3' } ,// data to be submit
+         function(data, status ) {// success callback
+            $('p').append('status: ' + status + ', data: ' + data);
+            alert(data);
+            alert(status);
+        });
+      });
+    });
+         $(document).ready(function () {
+      
+     $('#sendfriend').click(function(){
+      
+      $.get('friendrequest.php',   // url
+         { receiver:'<?php echo $_GET['user_id'] ?>' } ,// data to be submit
+         function(data, status ) {// success callback
+            $('p').append('status: ' + status + ', data: ' + data);
+            alert(data);
+            alert(status);
+        });
+      });
+    });
+    </script>
+</script>
+
 <style>
 
   .user {
@@ -60,20 +106,24 @@ float: right;
 }
 }
 </style>
+</head>
 <body bgcolor="grey">
+
 <?php
 include_once("../common/header1.php");
-$sender=$_GET['user_id'];
-$result1 = mysqli_query($mysqli, "SELECT *  from  friends where friends.sender='".$_SESSION["id"]."' AND friends.status = 1 AND friends.receiver='$sender'"); 
-$link="";
+
+//echo "SELECT *  from  friends where friends.sender='".$_SESSION["id"]."' AND friends.status = 1 AND friends.receiver='".$sender."'";
+//die();
+/*$link="";
 if( empty($res1) ){
-  $link="<a href='friendrequest.php?sender=". $_SESSION['id']."&receiver=". $sender."'>sendfriendrequest</a>";
+  $link="<a href='profile.php?sender=". $_SESSION['id']."&receiver=". $sender."'>sendfriendrequest</a>";
 }else{
-  $link="<a href='unfriend.php?receiver=". $res1['receiver']."&value=3'>unfriend</a>";
-}
-$result = mysqli_query($mysqli, "SELECT * FROM validate where id='$sender' "); 
+  $link="<a href=''>unfriend</a>";
+}*/
+$sennder=$_GET['user_id'];
+$result = mysqli_query($mysqli, "SELECT * FROM validate where id='$sennder' "); 
 $res1=mysqli_fetch_assoc($result);
-$pic="../common/profile/".$res1['profilepicture'];
+$pic=$res1['profilepicture'];
 $points= $res1['creditpoints'];
 switch (true) 
 {
@@ -90,7 +140,7 @@ case ($points >=601):
   $img = "../common/image/diamond.jpg";
  break;
 }
-$result = mysqli_query($mysqli, "SELECT * FROM validate where id='$sender' "); 
+$result = mysqli_query($mysqli, "SELECT * FROM validate where id='$sennder' "); 
 while($res = mysqli_fetch_assoc($result)){
 ?>
     <center><h2>PROFILE</h2></center>
@@ -105,9 +155,17 @@ while($res = mysqli_fetch_assoc($result)){
     </div>
 
     </div><br>
-    <center><div><?php echo $link; ?></div></center>
+      <?php
+
+$result1 = mysqli_query($mysqli, "SELECT *  from  friends where friends.sender='".$_SESSION["id"]."' AND friends.status = 1 AND friends.receiver='".$sennder."'"); 
+//echo "SELECT *  from  friends where friends.sender='".$_SESSION["id"]."' AND friends.receiver='".$sennder."' AND friends.status = 1";
+$ress1=mysqli_fetch_assoc($result1);
+if( empty($ress1)){ ?>
+        <center><div id="sendfriend"><a href="">sendfriendrequest</a>
+        </div></center><?php } else{?>
+              <center><div id="unfriend"> <a href=""> unfriend</a> 
+            </div></center>
+         <?php } }  ?>
     <br>
-    
-<?php  }  ?>
-<div><?php include_once("../common/footer.php")?></div>
+  <div><?php include_once("../common/footer.php")?></div>
 </body>

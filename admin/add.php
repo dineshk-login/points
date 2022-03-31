@@ -6,7 +6,7 @@
             filename = document.querySelector('#file1').value;
             //alert(filename);
             extension = filename.split('.').pop();
-            alert(extension);
+            //alert(extension);
             //document.querySelector('.output').textContent = extension;
             if(extension != 'gif' && extension != 'jpg' && extension != 'png'){
             	alert("This type of files are not allowed");
@@ -30,15 +30,18 @@ include_once("../db/connection.php");
 	$cls5="";
 	$cls6="";
 	$cls7="";
+	$cls8="";
 	$warning="";
+	$alert="";
 
 if(isset($_POST['submit'])){
+
   $imagename = $_FILES['file']['name'];
   $target_dir = "../common/profile/";
   $target_file = $target_dir . basename($_FILES["file"]["name"]);
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	$extensions_arr = array("jpg","jpeg","png","gif");
-  if( in_array($imageFileType,$extensions_arr) ){
+	if( in_array($imageFileType,$extensions_arr) ){
      if(move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$imagename)){
        echo $imagename;
      }
@@ -80,14 +83,28 @@ if(isset($_POST['twitter'])&&(($_POST['twitter']) == ""))
 if(isset($_POST['facebook'])&&(($_POST['facebook']) == "")) 
 {
 	$cls7="class='clss'";
-}  
+} 
+if(isset($_POST['email'])&&(($_POST['email']) == "")) 
+{
+	$cls8="class='clss'";
+
+}   
 if($_POST)
 {
-if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST['address']=="" || $_POST['description']==""  || $_POST['creditpoints']==""|| $_POST['twitter']==""||$_POST['facebook']=="")
+	
+$check_email="SELECT email FROM validate WHERE email= '".$_POST['email']."'";
+	//echo $check_email;
+	$result=mysqli_query($mysqli,$check_email);
+	$count=mysqli_num_rows($result);
+	//echo "count is >>" . $count;
+	if ($count > 0) {
+		$alert= "This email already exist";
+	}
+if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST['address']=="" || $_POST['description']==""  || $_POST['creditpoints']==""|| $_POST['twitter']==""||$_POST['facebook']==""||$_POST['email']=="")
 {
-	$warning = "* all fields are mandatory";
+	$warning = "* all fields are mandatory";}
 }
-else
+	else
 {
 	$name = $_POST['name'];
 	$password = $_POST['password'];
@@ -97,8 +114,9 @@ else
 	$creditpoints = $_POST['creditpoints'];
 	$file = $_POST['file'];
 	$twitter = $_POST['twitter'];
-    $facebook = $_POST['facebook'];
-	$result = mysqli_query($mysqli, "INSERT INTO `validate`(`name`,`password`,`color`,`address`,`description`,`creditpoints`,`profilepicture`,`twitter`,`facebook`) VALUES('$name','$password','$color','$address','$description','$creditpoints','$imagename','$twitter','$facebook')");
+  $facebook = $_POST['facebook'];
+  $email = $_POST['email'];
+	$result = mysqli_query($mysqli, "INSERT INTO `validate`(`name`,`password`,`color`,`address`,`description`,`creditpoints`,`profilepicture`,`twitter`,`facebook`,`email`) VALUES('$name','$password','$color','$address','$description','$creditpoints','$imagename','$twitter','$facebook','$email')");
 	header("Location:dashboard.php");
 }
 }
@@ -159,9 +177,14 @@ else
 	<td>facebook</td>
 	<td><input <?php echo $cls7; ?> type="text" name="facebook"  value="<?php if(isset($_POST['facebook'])) { echo $_POST['facebook'];} ?>"></td>
 	</tr>
-	<tr><tr>
+	<tr> 
+	<td>email</td>
+	<td><input <?php echo $cls8; ?> type="text" name="email"  value="<?php if(isset($_POST['email'])) { echo $_POST['email'];} ?>"><span><?=$alert;?></span></td>
+	</tr>
+	<tr>
 		<td> Choose photo:</td><td> <input type='file' name='file' id="file1" ></td>
 	</tr>
+	<tr>
 	<td><input type="button" name="btnsubmit" value="submit" onclick="checkfile()"></td>
 	</tr> 
 	</table>

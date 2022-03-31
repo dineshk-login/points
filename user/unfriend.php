@@ -7,10 +7,11 @@ if ($_SESSION["name"] =="") {
 	$receiver= $_GET['receiver'];
 	$id=$_SESSION["id"];
 	$value=$_GET['value'];
+	//die();
 if($value==3)
 { 
 	$status=3;
 	$result = mysqli_query($mysqli, "UPDATE friends SET status=$value WHERE sender = $id && receiver = $receiver");
-	header("Location:profile.php");
+	
 }
 ?>

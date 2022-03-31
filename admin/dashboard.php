@@ -33,7 +33,7 @@ td, th
 include("../common/header1.php");?></div>
 <center><img src="<?=$img;?>"width=200px height=100px></center>
 <table>
-<tr><td>name</td><td>creditpoints</td><td>color</td><td>address</td><td>delete</td><td>action</td></tr>
+<tr><td>name</td><td>Creditpoints</td><td>Color</td><td>Address</td><td>Facebook</td><td>Twitter</td><td>Email</td><td>Delete</td><td>Action</td></tr>
 <?php
 $result = mysqli_query($mysqli, "SELECT * FROM validate ORDER BY designation ASC , id DESC");
 $i=0;
@@ -56,9 +56,8 @@ if($res['designation'] == 'admin')
 {
 	$delete = "<a href='delete.php?name=".$x."'>Delete</a>";
 }?>
-<tr bgcolor="<?= $color;?>" ><td><?= $res['name'];?></td><td><?= $res['creditpoints'];?></td><td><?= $res['color'];?></td><td><?= $res['address'];?></td>
-<td><?= $delete;?></td><td><a href='edit.php?name=<?= $res['name'];?>
-	'>Edit/<a href='view.php?name=<?= $res['name'];?>'>view</a></a></a></td></tr>
+<tr bgcolor="<?= $color;?>" ><td><?= $res['name'];?></td><td><?= $res['creditpoints'];?></td><td><?= $res['color'];?></td><td><?= $res['address'];?></td><td><a href="<?= $res['facebook'];?>"><?= $res['facebook'];?></a></td><td><a href="<?= $res['twitter'];?>"><?= $res['twitter'];?></a></td><td><?= $res['email'];?></td>
+<td><?= $delete;?></td><td><a href='edit.php'>Edit/<a href='view.php?name=<?= $res['name'];?>'>view</a></a></a></td></tr>
 <?php  }  ?>
 </table>
 <div><?php include("../common/footer.php");?> </div>

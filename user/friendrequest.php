@@ -24,4 +24,4 @@ if($b==$a)
       echo "you already send friend request";
       die();
    }
-   ?>
+}?>

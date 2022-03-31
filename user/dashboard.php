@@ -114,7 +114,7 @@ for ($i=50; $i <= $pnt; $i+=50)
   <option>--select--</option>
 <?php
 include_once("../db/connection.php"); 
-  $result = mysqli_query($mysqli, "SELECT * FROM validate  where designation!='admin'"); 
+  $result = mysqli_query($mysqli, "SELECT * FROM validate  where designation!='admin' AND name!='$fname'"); 
 while($res = mysqli_fetch_assoc($result)) 
 { 	
   echo "<option value=".$res['id'].">".$res['name']."</option>";
@@ -135,6 +135,7 @@ while($ress = mysqli_fetch_assoc($ressult))
 ?>
 <?php
 $search="";
+$match = "";
 if(isset($_POST["search"])){
   $search=$_POST["search"];
 }
@@ -143,7 +144,7 @@ $a= $_SESSION['id'];
 $b=$_SESSION["name"];
 ?><center>
 <form action="" method="post">
-Search friend:<input type="text" name="search" value="<?=$search;?>">
+Search friend:<input type="text" name="search" value="<?=$search;?>"><?if($_post){ echo $match;}?>
 <input type="submit" value="submit" name="">
 </form></center>
 <table>
