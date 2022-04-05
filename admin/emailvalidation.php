@@ -2,6 +2,7 @@
 if($_POST){
 include_once("../db/connection.php");
 $email=$_POST['email'];
+if (!empty($email)) {
 $check_email="SELECT email FROM validate WHERE email= '".$email."'";
 	//echo $check_email;
 	$result=mysqli_query($mysqli,$check_email);
@@ -10,5 +11,5 @@ $check_email="SELECT email FROM validate WHERE email= '".$email."'";
 	if ($count > 0) {
 		echo "email id already exist";
 	}
-	}
+	}}
 	?>

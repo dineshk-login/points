@@ -12,9 +12,9 @@
             extension = filename.split('.').pop();
             //alert(extension);
             //document.querySelector('.output').textContent = extension;
-            if(extension != 'gif' && extension != 'jpg' && extension != 'png'){
+            if(extension != 'gif' && extension != 'jpg' && extension != 'png' && extension != ''){
             	alert("This type of files are not allowed");
-            	return false;
+            	//return false;
             }
             else{
             	document.form1.submit();
@@ -29,9 +29,15 @@ $(document).ready(function(){
 			{
 			email:$("#email").val(),
 			},
+
 		function(data,status){
-			$("#alert").text( data);
-		});
+				$("#alert").text( data);
+			/*if(data == "email id already exist"){
+			return false;}
+			 else{
+            	document.form1.submit();
+        }*/
+  });
 	});
 });
 
@@ -49,22 +55,31 @@ include_once("../db/connection.php");
 	$cls6="";
 	$cls7="";
 	$cls8="";
+	$cls9="";
 	$warning="";
 	$alert="";
+	$valid="";
+	if(isset($_FILES['photo']['name'])){
+$file = $_FILES['photo']['name'];
+//echo $file;
+if(!empty($file)){
 
-if(isset($_POST['submit'])){
-
-  $imagename = $_FILES['file']['name'];
+  $imagename = $_FILES['photo']['name'];
+ // echo $imagename;
   $target_dir = "../common/profile/";
-  $target_file = $target_dir . basename($_FILES["file"]["name"]);
+  $target_file = $target_dir . basename($_FILES["photo"]["name"]);
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	$extensions_arr = array("jpg","jpeg","png","gif");
 	if( in_array($imageFileType,$extensions_arr) ){
-     if(move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$imagename)){
-       echo $imagename;
+     if(move_uploaded_file($_FILES['photo']['tmp_name'],$target_dir.$imagename)){
+       //echo "hai";
+       //die();
      }
-  }
-}
+      }
+
+}}
+ //if(isset($_FILES['photo'])) { echo $_FILES['photo']['name'];} 
+
 if($_SESSION["superadmin"] =="")
 {
 	header("Location: ../user/login.php");
@@ -107,6 +122,30 @@ if(isset($_POST['email'])&&(($_POST['email']) == ""))
 	$cls8="class='clss'";
 
 }   
+if(isset($_POST['file'])&&(($_POST['file']) == "")) 
+{
+	$cls9="class='clss'";
+
+}  
+
+if(isset($_FILES['photo'])){
+$img="../common/profile/".$_FILES['photo']['name'];
+$imghidden=$_FILES['photo']['name'];
+}
+
+if(!empty($_POST['email'])){
+if(isset($_POST['email'])){ 
+$check_email="SELECT email FROM validate WHERE email= '".$_POST['email']."'";
+	//echo $check_email;
+	$result=mysqli_query($mysqli,$check_email);
+	$count=mysqli_num_rows($result);
+	if ($count > 0) {
+		$valid= "please enter another email";
+		echo $valid;
+		die();
+		
+	}}}
+
 if($_POST)
 {
 if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST['address']=="" || $_POST['description']==""  || $_POST['creditpoints']==""|| $_POST['twitter']==""||$_POST['facebook']==""||$_POST['email']=="")
@@ -119,13 +158,21 @@ if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST[
 	$password = $_POST['password'];
 	$color = $_POST['color'];
 	$address = $_POST['address'];
+	$img1=$_POST['hiddenimg'];
 	$description = $_POST['description'];
 	$creditpoints = $_POST['creditpoints'];
-	$file = $_POST['file'];
+	if(empty($imghidden)){
+			$file=$img1;
+	}else{
+	$file = $_FILES['photo']['name'];
+	}
+	//echo $file;
+	//die();
 	$twitter = $_POST['twitter'];
   $facebook = $_POST['facebook'];
   $email = $_POST['email'];
-	$result = mysqli_query($mysqli, "INSERT INTO `validate`(`name`,`password`,`color`,`address`,`description`,`creditpoints`,`profilepicture`,`twitter`,`facebook`,`email`) VALUES('$name','$password','$color','$address','$description','$creditpoints','$imagename','$twitter','$facebook','$email')");
+  //$profilepicture= $imagename;
+	$result = mysqli_query($mysqli, "INSERT INTO `validate`(`name`,`password`,`color`,`address`,`description`,`creditpoints`,`profilepicture`,`twitter`,`facebook`,`email`) VALUES('$name','$password','$color','$address','$description','$creditpoints','$file','$twitter','$facebook','$email')");
 	header("Location:dashboard.php");
 	}
 }
@@ -191,7 +238,8 @@ if($_POST['name']=="" || $_POST['password']=="" || $_POST['color']=="" ||$_POST[
 	<td><input <?php echo $cls8; ?> type="text" name="email" id="email" value="<?php if(isset($_POST['email'])) { echo $_POST['email'];} ?>" onkeyup="emailvalidate()"><span  style="color:red;" id="alert"></span></td>
 	</tr>
 	<tr>
-		<td> Choose photo:</td><td> <input type='file' name='file' id="file1" ></td>
+		<td> Choose photo:</td><td><?php if(isset($_FILES['photo'])   && !empty($_FILES['photo']['name'])){?> <img src="<?=$img;?>"width="50" height="60"><?php }?><input <?php echo $cls9; ?>  type='file' name='photo' id="file1"></td><span style="color:red;"><?=$valid;?></span>
+		<td><input type="hidden" name="hiddenimg" value="<?php if(isset($_FILES['photo'])){ echo $imghidden; }?>"></td>
 	</tr>
 	<tr>
 	<td><input type="button" name="btnsubmit" value="submit" onclick="checkfile()"></td>
